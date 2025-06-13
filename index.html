@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>骰子冒险 Demo</title>
+    <style>
+        :root {
+            --game-width: 720px;
+            --game-height: 1280px;
+            --scale: 1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+        }
+
+        #game-container {
+            width: var(--game-width);
+            height: var(--game-height);
+            transform-origin: top center;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #start-screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #start-screen h1 {
+            color: #ffffff;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+
+        #start-btn {
+            padding: 15px 40px;
+            font-size: 30px;
+            color: #ffffff;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #talent-btn {
+            padding: 12px 30px;
+            font-size: 20px;
+            color: #ffffff;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        #battle-screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        #grid {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-60%, -50%);
+            width: 166px;
+            height: 166px;
+            border: 2px solid rgba(151, 53, 53, 0.5);
+            background: none;
+            padding: 2px;
+        }
+
+        .grid-cell {
+            width: 25px;
+            height: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="start-screen">
+            <h1>骰子冒险</h1>
+            <button id="start-btn">开始游戏</button>
+            <button id="talent-btn">天赋系统</button>
+        </div>
+        
+        <div id="battle-screen">
+            <div id="grid"></div>
+        </div>
+    </div>
+
+    <script src="gameConfig.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startScreen = document.getElementById('start-screen');
+            const battleScreen = document.getElementById('battle-screen');
+            const startBtn = document.getElementById('start-btn');
+            const talentBtn = document.getElementById('talent-btn');
+
+            startBtn.addEventListener('click', function() {
+                startScreen.style.display = 'none';
+                battleScreen.style.display = 'block';
+                initGame();
+            });
+
+            talentBtn.addEventListener('click', function() {
+                console.log('打开天赋系统');
+            });
+
+            function initGame() {
+                const grid = document.getElementById('grid');
+                grid.innerHTML = '';
+                
+                for (let i = 0; i < 36; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('grid-cell');
+                    cell.dataset.index = i;
+                    grid.appendChild(cell);
+                }
+                
+                console.log('游戏初始化完成');
+            }
+        });
+    </script>
+</body>
+</html>
