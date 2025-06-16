@@ -222,9 +222,9 @@ window.GameConfig = {
                 },
                 UPGRADE: {
                     WIDTH: 105,         // 升级按钮宽度
-                    HEIGHT: 60,         // 升级按钮高度
+                    HEIGHT: 54,         // 升级按钮高度
                     BORDER_RADIUS: 2,   // 升级按钮圆角
-                    FONT_SIZE: 24,      // 升级按钮字体大小
+                    FONT_SIZE: 14,      // 升级按钮字体大小
                     TEXT_SHADOW: '1px 1px 2px rgba(0, 0, 0, 0.8)',  // 文字阴影
                     COST_INDICATOR: {
                         BOTTOM_OFFSET: -25,  // 成本指示器底部偏移
@@ -233,7 +233,7 @@ window.GameConfig = {
                         BACKGROUND: 'rgba(0, 0, 0, 0.7)',  // 背景色
                         COIN_SIZE: 20,       // 金币图标大小
                         TEXT_COLOR: '#FFD700',  // 文字颜色
-                        FONT_SIZE: 20         // 文字大小
+                        FONT_SIZE: 18         // 文字大小
                     }
                 },
                 REFRESH: {
@@ -257,128 +257,6 @@ window.GameConfig = {
         HEALTH_DISPLAY: {
             BAR_TOP: 1000,          // 血条顶部位置
             TEXT_TOP: 970           // 血量文字顶部位置
-        },
-        TALENT_SYSTEM: {
-            BACKGROUND: 'linear-gradient(135deg, #1a1a2e, #16213e)',  // 背景渐变
-            HEADER: {
-                POSITION: {
-                    TOP: 20,            // 顶部距离
-                    RIGHT: 20           // 右侧距离
-                },
-                GOLD_DISPLAY: {
-                    BACKGROUND: 'rgba(255, 215, 0, 0.2)',  // 金币显示背景
-                    BORDER: {
-                        WIDTH: 2,       // 边框宽度
-                        COLOR: '#ffd700',  // 边框颜色
-                        RADIUS: 15      // 圆角
-                    },
-                    PADDING: '10px 15px',  // 内边距
-                    ICON: {
-                        WIDTH: 24,      // 图标宽度
-                        HEIGHT: 24,     // 图标高度
-                        MARGIN_RIGHT: 8 // 右边距
-                    },
-                    TEXT: {
-                        COLOR: '#ffd700',   // 文字颜色
-                        FONT_SIZE: 18,     // 字体大小
-                        FONT_WEIGHT: 'bold' // 字体粗细
-                    }
-                }
-            },
-            MAP: {
-                SIZE: {
-                    WIDTH: 178,         // 地图宽度
-                    HEIGHT: 140         // 地图高度
-                },
-                MARGIN_BOTTOM: 30,      // 底部边距
-                BORDER: {
-                    WIDTH: 0,           // 边框宽度
-                    COLOR: '#ffd700',   // 边框颜色
-                    RADIUS: 10          // 圆角
-                },
-                IMAGE: './index_files/light1.png'     // 地图图片
-            },
-            START_BUTTON: {
-                PADDING: '15px 40px',   // 内边距
-                FONT_SIZE: 30,          // 字体大小
-                COLOR: '#ffffff',       // 文字颜色
-                BACKGROUND: 'linear-gradient(45deg, #ff6b6b, #ff8e53)',  // 背景渐变
-                BORDER_RADIUS: 50,      // 圆角
-                BOX_SHADOW: '0 4px 15px rgba(0, 0, 0, 0.2)',  // 阴影
-                MARGIN_BOTTOM: 40,      // 底部边距
-                HOVER: {
-                    TRANSFORM: 'translateY(-2px)',  // 悬停变换
-                    BOX_SHADOW: '0 6px 20px rgba(0, 0, 0, 0.3)',  // 悬停阴影
-                    BACKGROUND: 'linear-gradient(45deg, #ff8e53, #ff6b6b)'  // 悬停背景
-                },
-                ACTIVE: {
-                    TRANSFORM: 'translateY(1px)',   // 按下变换
-                    BOX_SHADOW: '0 2px 10px rgba(0, 0, 0, 0.2)'  // 按下阴影
-                }
-            },
-            // 关卡配置
-            LEVELS: [
-                {
-                    ID: 1,
-                    NAME: "沙漠之地",
-                    IMAGE: "./index_files/light1.png"
-                },
-                {
-                    ID: 2,
-                    NAME: "精灵森林",
-                    IMAGE: "./index_files/light2.png"
-                }
-            ],
-            TALENT_BUTTONS: {
-                GAP: 20,                // 按钮间距
-                BUTTON: {
-                    SIZE: {
-                        WIDTH: 60,      // 按钮宽度
-                        HEIGHT: 100     // 按钮高度
-                    },
-                    BACKGROUND: 'linear-gradient(135deg, #667eea, #764ba2)',  // 背景渐变
-                    BORDER: {
-                        WIDTH: 2,       // 边框宽度
-                        COLOR: '#ffd700',  // 边框颜色
-                        RADIUS: 10      // 圆角
-                    },
-                    PADDING: '10px 5px',    // 内边距
-                    HOVER: {
-                        TRANSFORM: 'translateY(-3px)',  // 悬停变换
-                        BOX_SHADOW: '0 8px 20px rgba(102, 126, 234, 0.4)'  // 悬停阴影
-                    },
-                    ICON: {
-                        WIDTH: 30,      // 图标宽度
-                        HEIGHT: 30      // 图标高度
-                    },
-                    TEXT: {
-                        COLOR: 'white', // 文字颜色
-                        FONT_SIZE: 10,  // 字体大小
-                        COST_COLOR: '#ffd700',      // 消耗颜色
-                        INSUFFICIENT_COLOR: '#ff6b6b'  // 金币不足颜色
-                    }
-                },
-                TYPES: {
-                    HEALTH: {
-                        NAME: '生命',
-                        IMAGE: './index_files/health.png',
-                        COST_RANGE: { MIN: 30, MAX: 40 },  // 消耗范围
-                        EFFECT: { TYPE: 'HEALTH_BOOST', AMOUNT: 20 }
-                    },
-                    SHIELD: {
-                        NAME: '盾牌',
-                        IMAGE: './index_files/shield.png',
-                        COST_RANGE: { MIN: 30, MAX: 40 },  // 消耗范围
-                        EFFECT: { TYPE: 'SHIELD_BOOST' }
-                    },
-                    HERO: {
-                        NAME: '英雄',
-                        IMAGE: './index_files/player.png',
-                        COST_RANGE: { MIN: 30, MAX: 40 },  // 消耗范围
-                        EFFECT: { TYPE: 'HERO_BOOST' }
-                    }
-                }
-            }
         }
     },
 
@@ -402,17 +280,159 @@ window.GameConfig = {
         }
     },
 
-    // 地图配置
-    MAPS: {
-        1: {
-            NAME: "第一关热带岛屿",
-            BACKGROUND: "light1",
-            MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+    // 天赋系统UI配置
+    TALENT_SYSTEM: {
+        // 天赋系统容器
+        CONTAINER: {
+            SIZE: {
+                WIDTH: 720,
+                HEIGHT: 1280
+            },
+            BACKGROUND: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+            Z_INDEX: 10002
         },
-        2: {
-            NAME: "第二关冰雪战场",
-            BACKGROUND: "light2",
-            MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+        // 头部区域（金币显示）
+        HEADER: {
+            POSITION: {
+                TOP: 20,
+                RIGHT: 20
+            },
+            Z_INDEX: 10003
+        },
+        // 关卡配置
+        LEVELS: [
+            {
+                ID: 1,
+                NAME: "沙漠之地",
+                IMAGE: "./index_files/light1.png"
+            },
+            {
+                ID: 2,
+                NAME: "精灵森林",
+                IMAGE: "./index_files/light2.png"
+            }
+        },
+        // 金币显示
+        GOLD_DISPLAY: {
+            BACKGROUND: 'rgba(255, 215, 0, 0.2)',
+            BORDER: {
+                WIDTH: 2,
+                COLOR: '#ffd700',
+                RADIUS: 15
+            },
+            PADDING: {
+                VERTICAL: 10,
+                HORIZONTAL: 15
+            },
+            ICON: {
+                SIZE: 24,
+                MARGIN_RIGHT: 8
+            },
+            TEXT: {
+                COLOR: '#ffd700',
+                FONT_SIZE: 18,
+                FONT_WEIGHT: 'bold'
+            }
+        },
+        // 内容区域
+        CONTENT: {
+            PADDING: {
+                TOP: 80,
+                BOTTOM: 20,
+                LEFT: 20,
+                RIGHT: 20
+            }
+        },
+        // 天赋地图
+        MAP: {
+            SIZE: {
+                WIDTH: 270,
+                HEIGHT: 147
+            },
+            MARGIN_TOP: -200,
+            MARGIN_BOTTOM: 30,
+            BORDER: {
+                WIDTH: 0,
+                COLOR: '#ffd700',
+                RADIUS: 0
+            },
+            IMAGE: './index_files/light1.png'
+        },
+        // 开始游戏按钮
+        START_BUTTON: {
+            PADDING: {
+                VERTICAL: 15,
+                HORIZONTAL: 40
+            },
+            FONT_SIZE: 30,
+            COLOR: '#ffffff',
+            BACKGROUND: 'linear-gradient(45deg, #ff6b6b, #ff8e53)',
+            BORDER_RADIUS: 50,
+            MARGIN_BOTTOM: 40,
+            HOVER: {
+                BACKGROUND: 'linear-gradient(45deg, #ff8e53, #ff6b6b)',
+                TRANSFORM: 'translateY(-2px)'
+            }
+        },
+        // 天赋按钮容器
+        BUTTONS_CONTAINER: {
+            GAP: 20
+        },
+        // 天赋按钮
+        BUTTON: {
+            SIZE: {
+                WIDTH: 100,
+                HEIGHT: 160
+            },
+            BACKGROUND: 'linear-gradient(135deg, #667eea, #764ba2)',
+            BORDER: {
+                WIDTH: 2,
+                COLOR: '#ffd700',
+                RADIUS: 10
+            },
+            PADDING: {
+                VERTICAL: 10,
+                HORIZONTAL: 5
+            },
+            ICON: {
+                SIZE: 30
+            },
+            TEXT: {
+                COLOR: 'white',
+                FONT_SIZE: 10
+            },
+            COST: {
+                COLOR: '#ffd700',
+                FONT_WEIGHT: 'bold',
+                MARGIN_TOP: 2,
+                INSUFFICIENT_COLOR: '#ff6b6b'
+            },
+            HOVER: {
+                TRANSFORM: 'translateY(-3px)',
+                SHADOW: '0 8px 20px rgba(102, 126, 234, 0.4)'
+            },
+            // 按钮图片配置
+            BUTTON_ICON: {
+                WIDTH: 40,
+                HEIGHT: 40,
+                POSITION: 'absolute',
+                TOP: 100,
+                RIGHT: 10
+                
+            }
+            MAPS: {
+                1: {
+                  NAME: "热带岛屿",
+                  BACKGROUND: "light1",
+                  MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+                },
+                2: {
+                  NAME: "冰雪战场",
+                  BACKGROUND: "light2",
+                  MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+                }
+              }
+              
         }
     }
 };
