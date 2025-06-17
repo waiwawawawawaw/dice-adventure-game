@@ -60,13 +60,33 @@ window.GameConfig = {
                         SCALE: 0.9,        // 整体缩放
                         OFFSET: {
                             X: 33,          // 水平偏移
-                            Y: 13           // 垂直偏移
+                            Y: 33           // 垂直偏移改为33，使其显示在右下角
                         },
                         BACKGROUND: 'rgba(0, 0, 0, 0.7)',  // 背景色
                         BORDER: {
                             COLOR: 'rgb(107, 73, 73)',     // 边框颜色
                             WIDTH: 1                       // 边框宽度
                         }
+                    },
+                    LEVEL_COUNTER: {       // 新增等级显示配置
+                        FONT_SIZE: 14,
+                        PADDING: {
+                            X: 4,
+                            Y: 1
+                        },
+                        BORDER_RADIUS: 8,
+                        SCALE: 0.9,
+                        OFFSET: {
+                            X: 33,         // 右下角X偏移
+                            Y: 44          // 右下角Y偏移
+                        },
+                        BACKGROUND: 'rgba(0, 0, 0, 0.7)',
+                        BORDER: {
+                            COLOR: 'rgb(107, 73, 73)',
+                            WIDTH: 1
+                        },
+                        PREFIX: 'Lv.',    // 等级前缀
+                        COLOR: '#FFD700'  // 等级数字颜色（金色）
                     },
                     WATER_EFFECT: {
                         COLOR: 'rgba(0, 174, 255, 0.6)',  // 水位效果颜色
@@ -311,10 +331,10 @@ window.GameConfig = {
                 NAME: "精灵森林",
                 IMAGE: "./index_files/light2.png"
             }
-        },
+        ,
         // 金币显示
-        GOLD_DISPLAY: {
-            BACKGROUND: 'rgba(255, 215, 0, 0.2)',
+        GOLD_DISPLAY,
+            BACKGROUND: 'rgba(255, 215, 0, 0.2)'
             BORDER: {
                 WIDTH: 2,
                 COLOR: '#ffd700',
@@ -418,21 +438,24 @@ window.GameConfig = {
                 POSITION: 'absolute',
                 TOP: 100,
                 RIGHT: 10
-                
             }
-            MAPS: {
-                1: {
-                  NAME: "热带岛屿",
-                  BACKGROUND: "light1",
-                  MONSTER_IMAGES: ["monster1.png", "xiao.png"]
-                },
-                2: {
-                  NAME: "冰雪战场",
-                  BACKGROUND: "light2",
-                  MONSTER_IMAGES: ["monster1.png", "xiao.png"]
-                }
-              }
-              
+        },
+        
+        // 地图配置
+        MAPS: {
+            1: {
+                NAME: "第一关热带岛屿",
+                BACKGROUND: "light1",
+                BATTLE_BACKGROUND: "bg.jpg",
+                MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+            },
+            2: {
+                NAME: "第二关冰雪战场",
+                BACKGROUND: "light2",
+                BATTLE_BACKGROUND: "bg1.jpg",
+                MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
+            }
         }
     }
 };
+

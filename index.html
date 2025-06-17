@@ -71,6 +71,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      background-image: url('bg.jpg');
+      background-size: cover;
+      background-position: center;
     }
 
     #start-screen h1 {
@@ -956,6 +959,20 @@
       font-size: 18px;
       font-weight: bold;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .level-name-text {
+      font-size: 14px;
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 3px;
+    }
+    
+    .wave-indicator > span {
+      display: flex;
       align-items: center;
       gap: 5px;
     }
@@ -1055,7 +1072,7 @@
 
     .shield-health {
       position: absolute;
-      top: -25px;
+      top: 0px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(0, 255, 255, 0.3);
@@ -1416,7 +1433,7 @@
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: 20px;
+      padding: -50px;
       box-sizing: border-box;
       overflow-y: auto;
       transform: translateX(80px);
@@ -1669,6 +1686,19 @@
 
     .level-reward-button.claimed .reward-amount {
       color: #666;
+    }
+
+    /* 金币等级样式 */
+    .gold-level {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 3px;
+      line-height: 1;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
     }
   </style>
 <style>/* stylelint-disable */
@@ -3006,6 +3036,11 @@
       <div class="talent-content">
         <div class="talent-level-display" id="talentLevelDisplay">
           <span class="talent-level-text">第一关 · 沙漠之地</span>
+          <div class="talent-levels-info">
+            <span class="talent-level-item">生命 Lv.<span id="healthLevelDisplay">0</span></span>
+            <span class="talent-level-item">护盾 Lv.<span id="shieldLevelDisplay">0</span></span>
+            <span class="talent-level-item">英雄 Lv.<span id="heroLevelDisplay">0</span></span>
+          </div>
         </div>
         <div class="talent-map">
           <button class="map-switch-button map-switch-left" id="mapSwitchLeft">
@@ -3040,6 +3075,55 @@
               <span class="reward-amount">+200金币</span>
             </div>
           </button>
+          <button class="level-reward-button" id="levelReward4" data-level="4">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第四关通关</span>
+              <span class="reward-amount">+400金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward5" data-level="5">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第五关通关</span>
+              <span class="reward-amount">+800金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward6" data-level="6">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第六关通关</span>
+              <span class="reward-amount">+1600金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward7" data-level="7">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第七关通关</span>
+              <span class="reward-amount">+3200金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward8" data-level="8">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第八关通关</span>
+              <span class="reward-amount">+6400金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward9" data-level="9">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第九关通关</span>
+              <span class="reward-amount">+12800金币</span>
+            </div>
+          </button>
+          <button class="level-reward-button" id="levelReward10" data-level="10">
+            <img src="./index_files/bx.png" alt="奖励" class="reward-icon">
+            <div class="reward-text">
+              <span class="reward-title">第十关通关</span>
+              <span class="reward-amount">+25600金币</span>
+            </div>
+          </button>
         </div>
         
         <button class="start-game-button" id="startGameButton">开始游戏</button>
@@ -3047,7 +3131,8 @@
           <button class="talent-button" id="healthTalentButton">
             <img src="./index_files/health.png" alt="生命">
             <div class="talent-button-text">
-              <span>生命</span>
+              <span>生命 Lv.<span id="healthButtonLevel">0</span></span>
+              <span class="talent-effect">+20最大生命</span>
               <span class="talent-cost" id="healthTalentCost">30</span>
             </div>
             <img src="speed-button.png" alt="生命按钮" class="talent-button-icon">
@@ -3055,7 +3140,8 @@
           <button class="talent-button" id="shieldTalentButton">
             <img src="./index_files/shield.png" alt="盾牌">
             <div class="talent-button-text">
-              <span>盾牌</span>
+              <span>护盾 Lv.<span id="shieldButtonLevel">0</span></span>
+              <span class="talent-effect">+20初始护盾</span>
               <span class="talent-cost" id="shieldTalentCost">35</span>
             </div>
             <img src="rocket-button.png" alt="盾牌按钮" class="talent-button-icon">
@@ -3063,7 +3149,8 @@
           <button class="talent-button" id="heroTalentButton">
             <img src="./index_files/player.png" alt="英雄">
             <div class="talent-button-text">
-              <span>英雄</span>
+              <span>英雄 Lv.<span id="heroButtonLevel">0</span></span>
+              <span class="talent-effect">+1英雄数量</span>
               <span class="talent-cost" id="heroTalentCost">40</span>
             </div>
             <img src="shield-button.png" alt="英雄按钮" class="talent-button-icon">
@@ -3135,6 +3222,12 @@
         this.gem2Counters = {
           [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION]: 0
         };
+        
+        // 天赋等级系统
+        this.healthTalentLevel = 0; // 生命天赋等级
+        this.shieldTalentLevel = 0; // 护盾天赋等级
+        this.heroTalentLevel = 0;   // 英雄天赋等级
+        
         this.talentEventsbound = false; // 标记天赋事件是否已绑定
         this.allowGem1Count = true;
         this.speedUpCount = 0;  // 新增：记录速度提升次数
@@ -3239,6 +3332,9 @@
         // 初始化响应式缩放
         window.addEventListener('resize', updateGameScale);
         updateGameScale();
+        
+        // 初始化主界面背景
+        this.updateAllInterfaceBackgrounds();
       }
 
       startGame() {
@@ -3249,11 +3345,7 @@
         this.updateGoldDisplay();
         
         // 设置当前地图背景
-        const currentMap = GameConfig.MAPS[this.currentMapId];
-        const gameContainer = document.getElementById('game-container');
-        if (gameContainer && currentMap) {
-          gameContainer.style.backgroundImage = `url('./index_files/${currentMap.BACKGROUND}.png')`;
-        }
+        this.updateAllInterfaceBackgrounds();
         
         // 播放背景音乐
         this.playBackgroundMusic();
@@ -3262,6 +3354,9 @@
         this.initializeGrid();
         console.log('Initializing game systems...');
         this.initializeGame();
+        
+        // 根据护盾天赋等级初始化护盾
+        this.initializeTalentEffects();
         
         // 初始化波数为1并生成第一波怪物
         this.waveNumber = 1;
@@ -3636,6 +3731,13 @@
         const waveIndicator = document.createElement('div');
         waveIndicator.className = 'wave-indicator';
         
+        // 添加关卡名称显示
+        const levelNameText = document.createElement('div');
+        levelNameText.className = 'level-name-text';
+        const currentMap = GameConfig.MAPS[this.currentMapId];
+        levelNameText.textContent = currentMap ? currentMap.NAME : '第一关 · 沙漠之地';
+        waveIndicator.appendChild(levelNameText);
+        
         const waveText = document.createElement('span');
         waveText.textContent = 'WAVE 0/7';
         waveIndicator.appendChild(waveText);
@@ -3650,13 +3752,19 @@
         this.battleScreen.appendChild(waveIndicator);
         this.waveText = waveText;
         this.waveProgressFill = waveProgressFill;
+        this.levelNameText = levelNameText;
       }
 
       spawnWaveMonsters() {
         console.log(`Spawning monsters for wave ${this.waveNumber}`);
         
-        // 生成与波数相等的普通怪物
-        for (let i = 0; i < this.waveNumber; i++) {
+        // 根据英雄天赋等级增加怪物数量：每级增加怪物数量上限 +1
+        const baseMonsterCount = this.waveNumber;
+        const talentMonsterBonus = this.heroTalentLevel; // 每级增加1个怪物
+        const totalMonsterCount = baseMonsterCount + talentMonsterBonus;
+        
+        // 生成怪物
+        for (let i = 0; i < totalMonsterCount; i++) {
           this.spawnMonster(false);  // 生成普通怪物
         }
 
@@ -3683,6 +3791,10 @@
         const healthScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.MONSTER_HEALTH;
         const damageScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.MONSTER_DAMAGE;
         const goldScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.GOLD_REWARD;
+        
+        // 应用天赋增强公式（下一关的敌人增强）
+        const talentHealthMultiplier = 1 + this.healthTalentLevel * 0.1; // 每级使怪物HP +10%
+        const talentDamageMultiplier = 1 + this.shieldTalentLevel * 0.1; // 每级使怪物攻击力 +10%
 
         const monster = document.createElement('div');
         monster.className = 'monster';
@@ -3714,7 +3826,7 @@
 
         // 计算动态血量
         const baseHealth = isBoss ? GameConfig.MONSTER.BOSS.HEALTH : GameConfig.MONSTER.INITIAL_HEALTH;
-        const scaledHealth = Math.floor(baseHealth * healthScaling * waveMultiplier);
+        const scaledHealth = Math.floor(baseHealth * healthScaling * waveMultiplier * talentHealthMultiplier);
         
         const monsterObj = {
           element: monster,
@@ -3724,7 +3836,7 @@
           health: scaledHealth,
           isBoss: isBoss,
           maxHealth: scaledHealth,
-          damage: Math.floor((isBoss ? GameConfig.MONSTER.BOSS.DAMAGE : GameConfig.MONSTER.DAMAGE) * damageScaling * waveMultiplier),
+          damage: Math.floor((isBoss ? GameConfig.MONSTER.BOSS.DAMAGE : GameConfig.MONSTER.DAMAGE) * damageScaling * waveMultiplier * talentDamageMultiplier),
           goldReward: Math.floor((isBoss ? GameConfig.MONSTER.BOSS.GOLD_REWARD : GameConfig.MONSTER.GOLD_REWARD) * goldScaling * waveMultiplier)
         };
 
@@ -4198,13 +4310,62 @@
         victoryDialog.style.display = 'block';
         
         // 完成当前关卡
-        this.completeLevel(this.currentLevel);
+        this.completeLevel(this.currentMapId);
         
-        // 2秒后关闭胜利对话框，直接打开天赋系统
+        // 2秒后关闭胜利对话框，切换到下一关卡并打开天赋系统
         setTimeout(() => {
           victoryDialog.style.display = 'none';
+          
+          // 自动切换到下一关卡
+          this.autoSwitchToNextMap();
+          
+          // 打开天赋系统
           this.showTalentSystem();
         }, 2000);
+      }
+      
+      // 自动切换到下一关卡
+      autoSwitchToNextMap() {
+        const maps = GameConfig.MAPS;
+        const mapIds = Object.keys(maps).map(id => parseInt(id)).sort((a, b) => a - b);
+        const currentIndex = mapIds.indexOf(this.currentMapId);
+        
+        // 如果不是最后一关，切换到下一关
+        if (currentIndex < mapIds.length - 1) {
+          this.currentMapId = mapIds[currentIndex + 1];
+          
+          // 更新所有界面的背景
+          this.updateAllInterfaceBackgrounds();
+        }
+      }
+      
+      // 更新所有界面的背景
+      updateAllInterfaceBackgrounds() {
+        const currentMap = GameConfig.MAPS[this.currentMapId];
+        const gameContainer = document.getElementById('game-container');
+        
+        if (gameContainer && currentMap) {
+          // 优先使用BATTLE_BACKGROUND，如果没有则使用BACKGROUND
+          const backgroundImage = currentMap.BATTLE_BACKGROUND || `./index_files/${currentMap.BACKGROUND}.png`;
+          gameContainer.style.backgroundImage = `url('${backgroundImage}')`;
+          
+          // 更新战斗界面中的关卡名称显示
+          if (this.levelNameText) {
+            this.levelNameText.textContent = currentMap.NAME;
+          }
+          
+          // 更新天赋系统中的关卡名称显示
+          const levelDisplay = document.getElementById('talentLevelDisplay');
+          if (levelDisplay) {
+            const levelTextElement = levelDisplay.querySelector('.talent-level-text');
+            if (levelTextElement) {
+              levelTextElement.textContent = currentMap.NAME;
+            }
+          }
+          
+          // 更新奖励按钮状态
+          this.updateRewardButtonStates();
+        }
       }
 
       // 重置到主界面
@@ -4231,20 +4392,34 @@
       // 更新奖励按钮状态
       updateRewardButtonStates() {
         const rewardButtons = document.querySelectorAll('.level-reward-button');
+        
+        // 计算要显示的关卡范围（当前关卡及前后各1关，最多3个）
+        const currentLevel = this.currentMapId;
+        const startLevel = Math.max(1, currentLevel - 1);
+        const endLevel = Math.min(10, startLevel + 2);
+        
         rewardButtons.forEach(button => {
           const level = parseInt(button.dataset.level);
           
           // 移除所有状态类
           button.classList.remove('available', 'claimed');
           
-          if (this.claimedRewards.has(level)) {
-            // 已领取
-            button.classList.add('claimed');
-          } else if (this.completedLevels.has(level)) {
-            // 可领取
-            button.classList.add('available');
+          // 判断是否应该显示这个按钮
+          if (level >= startLevel && level <= endLevel) {
+            button.style.display = 'flex';
+            
+            if (this.claimedRewards.has(level)) {
+              // 已领取
+              button.classList.add('claimed');
+            } else if (this.completedLevels.has(level)) {
+              // 可领取
+              button.classList.add('available');
+            }
+            // 默认状态（不可领取）不需要添加类
+          } else {
+            // 隐藏不在显示范围内的按钮
+            button.style.display = 'none';
           }
-          // 默认状态（不可领取）不需要添加类
         });
       }
 
@@ -4346,6 +4521,9 @@
         // 更新金币显示
         talentGoldAmount.textContent = this.goldAmount;
         
+        // 更新天赋等级显示
+        this.updateTalentLevelDisplays();
+        
         // 更新关卡奖励按钮状态
         this.updateRewardButtonStates();
         
@@ -4426,14 +4604,14 @@
         // 更新地图显示函数
         const updateMapDisplay = () => {
           const currentMap = maps[this.currentMapId];
-          levelTextElement.textContent = `地图${this.currentMapId}：${currentMap.NAME}`;
+          levelTextElement.textContent = currentMap.NAME;
           talentMapImage.src = `./index_files/${currentMap.BACKGROUND}.png`;
           
-          // 更新游戏背景
-          const gameContainer = document.getElementById('game-container');
-          if (gameContainer) {
-            gameContainer.style.backgroundImage = `url('./index_files/${currentMap.BACKGROUND}.png')`;
-          }
+          // 调用统一的背景更新方法
+          this.updateAllInterfaceBackgrounds();
+          
+          // 更新奖励按钮状态
+          this.updateRewardButtonStates();
         };
         
         // 初始化显示当前地图
@@ -4460,8 +4638,11 @@
           const cost = parseInt(document.getElementById('healthTalentCost').textContent);
           if (this.goldAmount >= cost) {
             this.goldAmount -= cost;
-            this.playerHealth += 20; // 增加20点生命值
+            this.healthTalentLevel++; // 增加生命天赋等级
+            // 根据公式计算新的最大生命值：baseHP + 20 × 生命等级
+            this.playerHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
             this.updateTalentGoldDisplay();
+            this.updateTalentLevelDisplays();
             this.generateTalentCosts();
           }
         };
@@ -4470,8 +4651,11 @@
           const cost = parseInt(document.getElementById('shieldTalentCost').textContent);
           if (this.goldAmount >= cost) {
             this.goldAmount -= cost;
-            // 这里可以添加盾牌效果逻辑
+            this.shieldTalentLevel++; // 增加护盾天赋等级
+            // 根据公式计算新的初始护盾值：baseShield + 20 × 护盾等级
+            // 这里可以在游戏开始时应用护盾效果
             this.updateTalentGoldDisplay();
+            this.updateTalentLevelDisplays();
             this.generateTalentCosts();
           }
         };
@@ -4480,8 +4664,11 @@
           const cost = parseInt(document.getElementById('heroTalentCost').textContent);
           if (this.goldAmount >= cost) {
             this.goldAmount -= cost;
-            // 这里可以添加英雄强化效果逻辑
+            this.heroTalentLevel++; // 增加英雄天赋等级
+            // 根据公式计算新的英雄数量：baseHeroCount + 英雄等级
+            // 这里可以在游戏中增加英雄数量
             this.updateTalentGoldDisplay();
+            this.updateTalentLevelDisplays();
             this.generateTalentCosts();
           }
         };
@@ -4495,6 +4682,81 @@
         const talentGoldAmount = document.getElementById('talentGoldAmount');
         talentGoldAmount.textContent = this.goldAmount;
         this.updateTalentButtonStates();
+      }
+
+      // 更新天赋等级显示
+      updateTalentLevelDisplays() {
+        // 更新顶部等级显示
+        document.getElementById('healthLevelDisplay').textContent = this.healthTalentLevel;
+        document.getElementById('shieldLevelDisplay').textContent = this.shieldTalentLevel;
+        document.getElementById('heroLevelDisplay').textContent = this.heroTalentLevel;
+        
+        // 更新按钮上的等级显示
+        document.getElementById('healthButtonLevel').textContent = this.healthTalentLevel;
+        document.getElementById('shieldButtonLevel').textContent = this.shieldTalentLevel;
+        document.getElementById('heroButtonLevel').textContent = this.heroTalentLevel;
+      }
+
+      // 初始化天赋效果
+      initializeTalentEffects() {
+        // 应用护盾天赋效果：baseShield + 20 × 护盾等级
+        if (this.shieldTalentLevel > 0) {
+          const initialShieldAmount = 20 * this.shieldTalentLevel;
+          // 给玩家位置（中心格子）添加护盾
+          const playerCell = this.grid.children[GameConfig.GRID_CELLS.EMPTY_CELL];
+          if (playerCell) {
+            // 设置护盾值
+            playerCell.dataset.shieldHealth = initialShieldAmount.toString();
+            
+            // 创建护盾视觉效果
+            const shieldLevel = Math.min(5, Math.ceil(initialShieldAmount / 20));
+            const shieldContainer = document.createElement('div');
+            shieldContainer.className = 'shield-container';
+            shieldContainer.style.cssText = `
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              pointer-events: none;
+              z-index: 10;
+            `;
+            
+            const shieldBorder = document.createElement('div');
+            shieldBorder.className = `shield-border level-${shieldLevel}`;
+            shieldBorder.style.cssText = `
+              position: absolute;
+              top: -2px;
+              left: -2px;
+              right: -2px;
+              bottom: -2px;
+              border: 3px solid #00ffff;
+              border-radius: 8px;
+              animation: shieldPulse 2s infinite;
+            `;
+            
+            const shieldHealth = document.createElement('div');
+            shieldHealth.className = 'shield-health';
+            shieldHealth.textContent = initialShieldAmount.toString();
+            shieldHealth.style.cssText = `
+              position: absolute;
+              top: -15px;
+              right: -5px;
+              background: rgba(0, 255, 255, 0.8);
+              color: white;
+              padding: 2px 6px;
+              border-radius: 10px;
+              font-size: 10px;
+              font-weight: bold;
+              min-width: 20px;
+              text-align: center;
+            `;
+            
+            shieldContainer.appendChild(shieldBorder);
+            shieldContainer.appendChild(shieldHealth);
+            playerCell.appendChild(shieldContainer);
+          }
+        }
       }
 
       // 在游戏循环中添加怪物更新
@@ -5211,7 +5473,7 @@
         shieldHealth.textContent = newShieldHealth.toString();
         shieldHealth.style.cssText = `
           position: absolute;
-          top: -25px;
+          top: 0px;
           left: 50%;
           transform: translateX(-50%);
           background: rgba(0, 255, 255, 0.3);
@@ -5591,4 +5853,61 @@
   </script>
 
 
-<div id="eagle-drag-images" style="position: fixed; top: -100000px;"></div></body></html>
+<div id="eagle-drag-images" style="position: fixed; top: -100000px;"></div>
+<script>
+// ========== 全局地图变量 ==========
+let currentMapIndex = 1;
+const maxMapIndex = 3;
+
+// ========== 切换地图 ==========
+function switchMap(direction) {
+  if (direction === 'left') {
+    currentMapIndex = currentMapIndex > 1 ? currentMapIndex - 1 : maxMapIndex;
+  } else if (direction === 'right') {
+    currentMapIndex = currentMapIndex < maxMapIndex ? currentMapIndex + 1 : 1;
+  }
+  localStorage.setItem('currentMapIndex', currentMapIndex);
+  updateMapDisplay();
+}
+
+// ========== 更新地图显示到所有界面 ==========
+function updateMapDisplay() {
+  const bgUrl = `url('map${currentMapIndex}.jpg')`;
+
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) gameContainer.style.backgroundImage = bgUrl;
+
+  const battleScreen = document.getElementById('battle-screen');
+  if (battleScreen) {
+    battleScreen.style.backgroundImage = bgUrl;
+    battleScreen.style.backgroundSize = 'cover';
+    battleScreen.style.backgroundPosition = 'center';
+  }
+
+  const talentMap = document.querySelector('.talent-map-image');
+  if (talentMap) {
+    talentMap.src = `map${currentMapIndex}.jpg`;
+  }
+}
+
+// ========== 初始化地图状态 ==========
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('currentMapIndex');
+  if (saved) currentMapIndex = parseInt(saved);
+  updateMapDisplay();
+});
+
+// ========== 进入战斗和天赋界面 ==========
+function startGame() {
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('battle-screen').style.display = 'block';
+  updateMapDisplay();
+}
+
+function openTalentSystem() {
+  document.querySelector('.talent-system').style.display = 'block';
+  updateMapDisplay();
+}
+</script>
+
+</body></html>

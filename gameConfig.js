@@ -327,6 +327,46 @@ window.GameConfig = {
                     ID: 2,
                     NAME: "精灵森林",
                     IMAGE: "./index_files/light2.png"
+                },
+                {
+                    ID: 3,
+                    NAME: "冰雪王国",
+                    IMAGE: "./index_files/light1.png"
+                },
+                {
+                    ID: 4,
+                    NAME: "火山熔岩",
+                    IMAGE: "./index_files/light2.png"
+                },
+                {
+                    ID: 5,
+                    NAME: "深海秘境",
+                    IMAGE: "./index_files/light1.png"
+                },
+                {
+                    ID: 6,
+                    NAME: "天空之城",
+                    IMAGE: "./index_files/light2.png"
+                },
+                {
+                    ID: 7,
+                    NAME: "暗影之谷",
+                    IMAGE: "./index_files/light1.png"
+                },
+                {
+                    ID: 8,
+                    NAME: "光明圣殿",
+                    IMAGE: "./index_files/light2.png"
+                },
+                {
+                    ID: 9,
+                    NAME: "星辰废墟",
+                    IMAGE: "./index_files/light1.png"
+                },
+                {
+                    ID: 10,
+                    NAME: "终极试炼",
+                    IMAGE: "./index_files/light2.png"
                 }
             ],
             TALENT_BUTTONS: {
@@ -405,14 +445,64 @@ window.GameConfig = {
     // 地图配置
     MAPS: {
         1: {
-            NAME: "第一关热带岛屿",
+            NAME: "第一关 · 沙漠之地",
             BACKGROUND: "light1",
+            BATTLE_BACKGROUND: "bg.jpg",
             MONSTER_IMAGES: ["monster1.png", "xiao.png"]
         },
         2: {
-            NAME: "第二关冰雪战场",
+            NAME: "第二关 · 精灵森林",
             BACKGROUND: "light2",
+            BATTLE_BACKGROUND: "bg1.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
+        },
+        3: {
+            NAME: "第三关 · 冰雪王国",
+            BACKGROUND: "light1",
+            BATTLE_BACKGROUND: "bg3.png",
             MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+        },
+        4: {
+            NAME: "第四关 · 火山熔岩",
+            BACKGROUND: "light2",
+            BATTLE_BACKGROUND: "bg.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
+        },
+        5: {
+            NAME: "第五关 · 深海秘境",
+            BACKGROUND: "light1",
+            BATTLE_BACKGROUND: "bg1.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+        },
+        6: {
+            NAME: "第六关 · 天空之城",
+            BACKGROUND: "light2",
+            BATTLE_BACKGROUND: "bg3.png",
+            MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
+        },
+        7: {
+            NAME: "第七关 · 暗影之谷",
+            BACKGROUND: "light1",
+            BATTLE_BACKGROUND: "bg.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+        },
+        8: {
+            NAME: "第八关 · 光明圣殿",
+            BACKGROUND: "light2",
+            BATTLE_BACKGROUND: "bg1.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
+        },
+        9: {
+            NAME: "第九关 · 星辰废墟",
+            BACKGROUND: "light1",
+            BATTLE_BACKGROUND: "bg3.png",
+            MONSTER_IMAGES: ["monster1.png", "xiao.png"]
+        },
+        10: {
+            NAME: "第十关 · 终极试炼",
+            BACKGROUND: "light2",
+            BATTLE_BACKGROUND: "bg.jpg",
+            MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
         }
     }
 };
