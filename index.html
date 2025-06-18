@@ -2979,7 +2979,7 @@
     <div id="start-screen">
       <h1>骰子冒险 Demo</h1>
       <button id="start-btn">开始游戏</button>
-      <button id="talent-btn">天赋系统</button>
+      <button id="talent-btn" style="display: none;">天赋系统</button>
     </div>
     <div id="battle-screen">
       <div class="gold-display">
@@ -3711,10 +3711,17 @@
       }
 
       initializeGame() {
+        // 确保玩家生命值考虑天赋加成
+        const maxHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
+        // 如果玩家生命值未初始化或小于最大生命值，则设置为最大生命值
+        if (!this.playerHealth || this.playerHealth < maxHealth) {
+          this.playerHealth = maxHealth;
+        }
+        
         // 添加血量文字显示
         const healthText = document.createElement('div');
         healthText.className = 'health-text';
-        healthText.textContent = '路飞血量：100/100';
+        healthText.textContent = `路飞血量：${this.playerHealth}/${maxHealth}`;
         this.battleScreen.appendChild(healthText);
         this.healthText = healthText;
 
@@ -3723,6 +3730,9 @@
         healthBar.className = 'health-bar';
         const healthFill = document.createElement('div');
         healthFill.className = 'health-fill';
+        // 设置初始血条宽度
+        const healthPercentage = (this.playerHealth / maxHealth) * 100;
+        healthFill.style.width = `${healthPercentage}%`;
         healthBar.appendChild(healthFill);
         this.battleScreen.appendChild(healthBar);
         this.healthFill = healthFill;
@@ -3945,8 +3955,10 @@
         // 处理剩余伤害
         if (actualDamage > 0) {
           this.playerHealth = Math.max(0, this.playerHealth - actualDamage);
-          this.healthFill.style.width = `${this.playerHealth}%`;
-          this.healthText.textContent = `路飞血量：${this.playerHealth}/100`;
+          const maxHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
+          const healthPercentage = (this.playerHealth / maxHealth) * 100;
+          this.healthFill.style.width = `${healthPercentage}%`;
+          this.healthText.textContent = `路飞血量：${this.playerHealth}/${maxHealth}`;
 
           // 显示飘血效果
           const damageText = document.createElement('div');
@@ -4225,7 +4237,8 @@
         this.monsters = [];
         // 清理边界动画
         this.grid.classList.remove('grid-boundary-alert');
-        this.playerHealth = GameConfig.PLAYER.INITIAL_HEALTH;
+        // 设置玩家生命值，考虑天赋加成
+        this.playerHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
         this.waveTimeout = null;
         this.monsterSpeed = GameConfig.MONSTER.MOVEMENT_SPEED;
         
@@ -4233,6 +4246,9 @@
         this.gem2Counters = {
           [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION]: 0
         };
+        
+        // 重置gem2Cells数组，只保留默认的英雄格子
+        this.gem2Cells = [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION];
         
         // 清除所有定时器
         if (this.waveTimeout) {
@@ -4591,8 +4607,7 @@
           const talentSystem = document.getElementById('talentSystem');
           talentSystem.style.display = 'none';
           this.resetGame();
-          document.getElementById('battle-screen').style.display = 'none';
-          document.getElementById('start-screen').style.display = 'flex';
+          this.startGame(); // 直接调用startGame方法进入战斗界面
         });
         
         // 地图切换按钮
@@ -5251,9 +5266,11 @@
                   }
                   break;
                 case 'health':
-                  this.playerHealth = Math.min(100, this.playerHealth + buttonConfig.AMOUNT);
-                  this.healthFill.style.width = `${this.playerHealth}%`;
-                  this.healthText.textContent = `路飞血量：${this.playerHealth}/100`;
+                  const maxHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
+        this.playerHealth = Math.min(maxHealth, this.playerHealth + buttonConfig.AMOUNT);
+        const healthPercentage = (this.playerHealth / maxHealth) * 100;
+        this.healthFill.style.width = `${healthPercentage}%`;
+        this.healthText.textContent = `路飞血量：${this.playerHealth}/${maxHealth}`;
                   break;
                 case 'hero':
                   if (buttonConfig.EFFECT && buttonConfig.EFFECT.TYPE === 'ADD_GEM2') {
