@@ -117,6 +117,18 @@ window.GameConfig = {
             },
             IMAGES: ['BOSS.png', 'BOSS1.png', 'BOSS2.png'],  // BOSS图片
             ANIMATION_INTERVAL: 500   // BOSS动画间隔(毫秒)
+        },
+        FINAL_BOSS: {
+            WAVE: 7,                 // 最终BOSS出现在第7波
+            HEALTH: 160,             // 最终BOSS血量（普通BOSS的2倍）
+            DAMAGE: 12,              // 最终BOSS伤害（普通BOSS的2倍）
+            GOLD_REWARD: 50,         // 最终BOSS金币奖励（普通BOSS的2倍）
+            SIZE: {
+                WIDTH: 120,          // 最终BOSS宽度（更大）
+                HEIGHT: 120          // 最终BOSS高度（更大）
+            },
+            IMAGES: ['BOSS.png', 'BOSS1.png', 'BOSS2.png'],  // 最终BOSS图片
+            ANIMATION_INTERVAL: 300   // 最终BOSS动画间隔更快
         }
     },
 
@@ -459,7 +471,7 @@ window.GameConfig = {
         3: {
             NAME: "第三关 · 冰雪王国",
             BACKGROUND: "light1",
-            BATTLE_BACKGROUND: "bg3.png",
+            BATTLE_BACKGROUND: "bg3.jpg",
             MONSTER_IMAGES: ["monster1.png", "xiao.png"]
         },
         4: {
@@ -477,7 +489,7 @@ window.GameConfig = {
         6: {
             NAME: "第六关 · 天空之城",
             BACKGROUND: "light2",
-            BATTLE_BACKGROUND: "bg3.png",
+            BATTLE_BACKGROUND: "bg3.jpg",
             MONSTER_IMAGES: ["monster1.png", "xiao_lv.png", "xiao.png"]
         },
         7: {
@@ -495,7 +507,7 @@ window.GameConfig = {
         9: {
             NAME: "第九关 · 星辰废墟",
             BACKGROUND: "light1",
-            BATTLE_BACKGROUND: "bg3.png",
+            BATTLE_BACKGROUND: "bg3.jpg",
             MONSTER_IMAGES: ["monster1.png", "xiao.png"]
         },
         10: {

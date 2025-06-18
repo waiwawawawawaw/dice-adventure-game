@@ -860,11 +860,42 @@
       z-index: 11;
     }
 
+    /* 最终BOSS样式 */
+    .monster.final-boss {
+      width: 120px;
+      height: 120px;
+      z-index: 12;
+      filter: drop-shadow(0 0 15px #ff0000);
+    }
+
     @keyframes bossAnimation {
       0% { background-image: url('BOSS.png'); }
       33.33% { background-image: url('BOSS1.png'); }
       66.66% { background-image: url('BOSS2.png'); }
       100% { background-image: url('BOSS.png'); }
+    }
+
+    @keyframes finalBossAnimation {
+      0% { 
+        background-image: url('BOSS.png'); 
+        transform: scale(1);
+      }
+      25% { 
+        background-image: url('BOSS1.png'); 
+        transform: scale(1.05);
+      }
+      50% { 
+        background-image: url('BOSS2.png'); 
+        transform: scale(1);
+      }
+      75% { 
+        background-image: url('BOSS1.png'); 
+        transform: scale(1.05);
+      }
+      100% { 
+        background-image: url('BOSS.png'); 
+        transform: scale(1);
+      }
     }
 
     /* 血条样式 */
@@ -904,6 +935,40 @@
     @keyframes floatDamage {
       0% { transform: translate(-50%, 0); opacity: 1; }
       100% { transform: translate(-50%, -50px); opacity: 0; }
+    }
+
+    /* BOSS提示文字样式 */
+    .boss-warning {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: #ff0000;
+      font-size: 48px;
+      font-weight: bold;
+      padding: 20px 40px;
+      border: 3px solid #ff0000;
+      border-radius: 15px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+      z-index: 10000;
+      animation: bossWarningPulse 2s ease-in-out;
+    }
+
+    @keyframes bossWarningPulse {
+      0% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.5); 
+      }
+      50% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.1); 
+      }
+      100% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(1); 
+      }
     }
 
     .damage-text {
@@ -3422,16 +3487,22 @@
         // 初始化这个格子的计数器
         this.gem2Counters[position] = 0;
         
-        // 初始化英雄等级显示
+        // 初始化英雄等级显示，根据天赋等级设置初始等级
         if (!this.gem2Levels) this.gem2Levels = {};
-        if (!this.gem2Levels[position]) this.gem2Levels[position] = 1;
+        if (!this.gem2Levels[position]) {
+          // 如果是默认英雄格子，等级为天赋等级+1（至少为1）
+          this.gem2Levels[position] = Math.max(1, this.heroTalentLevel || 1);
+        }
         this.updateGem2LevelDisplay(position);
       }
 
       // 新增：转换格子为gem2的方法
-      convertToGem2(position) {
+      convertToGem2(position, initialLevel = 1) {
         const cell = this.cellElements[position];
-        if (!cell) return;
+        if (!cell) {
+          console.error(`Cell at position ${position} not found`);
+          return;
+        }
 
         // 清除原有的内容和类
         cell.innerHTML = '';
@@ -3439,11 +3510,20 @@
         
         // 设置为gem2
         this.setupGem2Cell(cell, position);
-        this.gem2Cells.push(position);
         
-        // 初始化英雄等级
+        // 确保不重复添加到数组中
+        if (!this.gem2Cells.includes(position)) {
+          this.gem2Cells.push(position);
+        }
+        
+        // 初始化英雄等级，使用传入的初始等级
         if (!this.gem2Levels) this.gem2Levels = {};
-        this.gem2Levels[position] = 1;
+        this.gem2Levels[position] = initialLevel;
+        
+        // 更新等级显示
+        this.updateGem2LevelDisplay(position);
+        
+        console.log(`Successfully converted position ${position} to gem2 with level ${initialLevel}. Current gem2Cells:`, this.gem2Cells);
       }
 
       // 新增：升级英雄格子的方法
@@ -3782,9 +3862,17 @@
         if (this.waveNumber === GameConfig.MONSTER.BOSS.WAVE) {
           this.spawnMonster(true);  // 生成BOSS
         }
+
+        // 在第七波（最后一波）额外生成一个最终BOSS
+        if (this.waveNumber === GameConfig.MONSTER.FINAL_BOSS.WAVE) {
+          this.showBossWarning("最终BOSS");
+          setTimeout(() => {
+            this.spawnMonster(false, true);  // 生成最终BOSS
+          }, 2000); // 延迟2秒生成最终BOSS
+        }
       }
 
-      spawnMonster(isBoss = false) {
+      spawnMonster(isBoss = false, isFinalBoss = false) {
         const angle = Math.random() * Math.PI * 2;
         const distance = GameConfig.MONSTER.SPAWN_DISTANCE;
         
@@ -3792,12 +3880,28 @@
         const centerX = gridRect.left + gridRect.width / 2;
         const centerY = gridRect.top + gridRect.height / 2;
         
-        const monsterSize = isBoss ? GameConfig.MONSTER.BOSS.SIZE : GameConfig.MONSTER.SIZE;
+        let monsterSize, bossConfig;
+        if (isFinalBoss) {
+          monsterSize = GameConfig.MONSTER.FINAL_BOSS.SIZE;
+          bossConfig = GameConfig.MONSTER.FINAL_BOSS;
+        } else if (isBoss) {
+          monsterSize = GameConfig.MONSTER.BOSS.SIZE;
+          bossConfig = GameConfig.MONSTER.BOSS;
+        } else {
+          monsterSize = GameConfig.MONSTER.SIZE;
+        }
+        
         const monsterX = centerX + Math.cos(angle) * distance - monsterSize.WIDTH / 2;
         const monsterY = centerY + Math.sin(angle) * distance - monsterSize.HEIGHT / 2;
 
         // 应用动态平衡公式
-        const waveMultiplier = isBoss ? GameConfig.BALANCE.WAVE_SCALING.BOSS_MULTIPLIER : 1;
+        let waveMultiplier = 1;
+        if (isFinalBoss) {
+          waveMultiplier = 2; // 最终BOSS是普通BOSS的2倍
+        } else if (isBoss) {
+          waveMultiplier = GameConfig.BALANCE.WAVE_SCALING.BOSS_MULTIPLIER;
+        }
+        
         const healthScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.MONSTER_HEALTH;
         const damageScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.MONSTER_DAMAGE;
         const goldScaling = 1 + (this.waveNumber - 1) * GameConfig.BALANCE.WAVE_SCALING.GOLD_REWARD;
@@ -3809,9 +3913,12 @@
         const monster = document.createElement('div');
         monster.className = 'monster';
         
-        if (isBoss) {
+        if (isFinalBoss) {
+          monster.classList.add('final-boss');
+          monster.style.animation = `finalBossAnimation ${bossConfig.ANIMATION_INTERVAL}ms infinite`;
+        } else if (isBoss) {
           monster.classList.add('boss');
-          monster.style.animation = `bossAnimation ${GameConfig.MONSTER.BOSS.ANIMATION_INTERVAL}ms infinite`;
+          monster.style.animation = `bossAnimation ${bossConfig.ANIMATION_INTERVAL}ms infinite`;
         } else {
           // 根据当前地图配置设置普通怪物图片
           const currentMap = GameConfig.MAPS[this.currentMapId];
@@ -3835,7 +3942,21 @@
         monster.style.top = `${monsterY}px`;
 
         // 计算动态血量
-        const baseHealth = isBoss ? GameConfig.MONSTER.BOSS.HEALTH : GameConfig.MONSTER.INITIAL_HEALTH;
+        let baseHealth, baseDamage, baseGoldReward;
+        if (isFinalBoss) {
+          baseHealth = bossConfig.HEALTH;
+          baseDamage = bossConfig.DAMAGE;
+          baseGoldReward = bossConfig.GOLD_REWARD;
+        } else if (isBoss) {
+          baseHealth = bossConfig.HEALTH;
+          baseDamage = bossConfig.DAMAGE;
+          baseGoldReward = bossConfig.GOLD_REWARD;
+        } else {
+          baseHealth = GameConfig.MONSTER.INITIAL_HEALTH;
+          baseDamage = GameConfig.MONSTER.DAMAGE;
+          baseGoldReward = GameConfig.MONSTER.GOLD_REWARD;
+        }
+        
         const scaledHealth = Math.floor(baseHealth * healthScaling * waveMultiplier * talentHealthMultiplier);
         
         const monsterObj = {
@@ -3844,13 +3965,27 @@
           x: monsterX + monsterSize.WIDTH / 2,
           y: monsterY + monsterSize.HEIGHT / 2,
           health: scaledHealth,
-          isBoss: isBoss,
+          isBoss: isBoss || isFinalBoss,
+          isFinalBoss: isFinalBoss,
           maxHealth: scaledHealth,
-          damage: Math.floor((isBoss ? GameConfig.MONSTER.BOSS.DAMAGE : GameConfig.MONSTER.DAMAGE) * damageScaling * waveMultiplier * talentDamageMultiplier),
-          goldReward: Math.floor((isBoss ? GameConfig.MONSTER.BOSS.GOLD_REWARD : GameConfig.MONSTER.GOLD_REWARD) * goldScaling * waveMultiplier)
+          damage: Math.floor(baseDamage * damageScaling * waveMultiplier * talentDamageMultiplier),
+          goldReward: Math.floor(baseGoldReward * goldScaling * waveMultiplier)
         };
 
         this.monsters.push(monsterObj);
+      }
+
+      // 显示BOSS警告
+      showBossWarning(text) {
+        const warning = document.createElement('div');
+        warning.className = 'boss-warning';
+        warning.textContent = text;
+        document.body.appendChild(warning);
+        
+        // 2秒后自动移除
+        setTimeout(() => {
+          warning.remove();
+        }, 2000);
       }
 
       updateMonsters() {
@@ -4242,13 +4377,26 @@
         this.waveTimeout = null;
         this.monsterSpeed = GameConfig.MONSTER.MOVEMENT_SPEED;
         
-        // 重置gem2计数器
-        this.gem2Counters = {
-          [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION]: 0
-        };
+        // 重置gem2计数器，但保留天赋系统添加的英雄格子
+        this.gem2Counters = {};
+        this.gem2Cells.forEach(pos => {
+          this.gem2Counters[pos] = 0;
+        });
         
-        // 重置gem2Cells数组，只保留默认的英雄格子
-        this.gem2Cells = [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION];
+        // 如果gem2Cells为空或只有默认格子，确保至少有默认英雄格子
+        if (!this.gem2Cells || this.gem2Cells.length === 0) {
+          this.gem2Cells = [GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION];
+          this.gem2Counters[GameConfig.GRID_CELLS.SPECIAL_CELLS.GEM2.POSITION] = 0;
+        }
+        
+        // 重置英雄等级，根据天赋等级设置
+        if (!this.gem2Levels) this.gem2Levels = {};
+        this.gem2Cells.forEach(pos => {
+          // 所有英雄格子的等级都设置为当前天赋等级（至少为1）
+          this.gem2Levels[pos] = Math.max(1, this.heroTalentLevel || 1);
+        });
+        
+        console.log('Reset game - preserved gem2Cells:', this.gem2Cells, 'with levels:', this.gem2Levels);
         
         // 清除所有定时器
         if (this.waveTimeout) {
@@ -4655,7 +4803,19 @@
             this.goldAmount -= cost;
             this.healthTalentLevel++; // 增加生命天赋等级
             // 根据公式计算新的最大生命值：baseHP + 20 × 生命等级
-            this.playerHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
+            const maxHealth = GameConfig.PLAYER.INITIAL_HEALTH + 20 * this.healthTalentLevel;
+            this.playerHealth = maxHealth;
+            
+            // 只有在游戏进行中时才更新血条显示（血条元素存在时）
+            if (this.healthText && this.healthFill) {
+              this.healthText.textContent = `路飞血量：${this.playerHealth}/${maxHealth}`;
+              const healthPercentage = (this.playerHealth / maxHealth) * 100;
+              this.healthFill.style.width = `${healthPercentage}%`;
+              console.log(`Updated health display: ${this.playerHealth}/${maxHealth} (${healthPercentage}%)`);
+            } else {
+              console.log(`Health talent upgraded to level ${this.healthTalentLevel}, max health: ${maxHealth}`);
+            }
+            
             this.updateTalentGoldDisplay();
             this.updateTalentLevelDisplays();
             this.generateTalentCosts();
@@ -4679,9 +4839,65 @@
           const cost = parseInt(document.getElementById('heroTalentCost').textContent);
           if (this.goldAmount >= cost) {
             this.goldAmount -= cost;
+            const previousLevel = this.heroTalentLevel; // 记录升级前的等级
             this.heroTalentLevel++; // 增加英雄天赋等级
-            // 根据公式计算新的英雄数量：baseHeroCount + 英雄等级
-            // 这里可以在游戏中增加英雄数量
+            
+            // 应用英雄天赋效果
+            const heroConfig = GameConfig.UPGRADES.BUTTONS.HERO_BOOST;
+            if (heroConfig && heroConfig.EFFECT && heroConfig.EFFECT.TYPE === 'ADD_GEM2') {
+              
+              if (previousLevel === 0) {
+                // 第一次升级（0→1）：增加一个新英雄格子
+                const availableCells = heroConfig.EFFECT.CONVERT_CELLS
+                  .filter(pos => {
+                    const cell = this.cellElements[pos];
+                    // 确保不选择已被占用的格子
+                    return !this.gem2Cells.includes(pos) && 
+                           (!cell || (
+                             cell.dataset.hasRocket !== 'true' &&
+                             cell.dataset.isSpeedCell !== 'true' &&
+                             !cell.classList.contains('gem1') &&
+                             !cell.classList.contains('gold-cell')
+                           ));
+                  });
+                
+                if (availableCells.length > 0) {
+                  // 创建新英雄，等级为当前天赋等级
+                  const randomIndex = Math.floor(Math.random() * availableCells.length);
+                  const selectedPosition = availableCells[randomIndex];
+                  this.convertToGem2(selectedPosition, this.heroTalentLevel);
+                  console.log(`First upgrade: Created new hero at position ${selectedPosition} with level ${this.heroTalentLevel}`);
+                } else {
+                  console.log('No available cells for new hero on first upgrade');
+                }
+              } else {
+                // 后续升级（≥1）：只升级现有英雄的等级，不增加新格子
+                const existingGem2Cells = this.gem2Cells.slice(); // 复制数组避免修改原数组
+                
+                if (existingGem2Cells.length > 0) {
+                  // 升级所有现有英雄格子的等级到当前天赋等级
+                  existingGem2Cells.forEach(position => {
+                    // 将英雄等级设置为当前天赋等级
+                    if (!this.gem2Levels) this.gem2Levels = {};
+                    this.gem2Levels[position] = this.heroTalentLevel;
+                    this.updateGem2LevelDisplay(position);
+                    
+                    // 添加升级特效
+                    const cell = this.cellElements[position];
+                    if (cell) {
+                      cell.classList.add('upgrade-effect');
+                      setTimeout(() => {
+                        cell.classList.remove('upgrade-effect');
+                      }, 500);
+                    }
+                  });
+                  console.log(`Upgraded all existing heroes to level ${this.heroTalentLevel}`);
+                } else {
+                  console.log('No existing heroes to upgrade');
+                }
+              }
+            }
+            
             this.updateTalentGoldDisplay();
             this.updateTalentLevelDisplays();
             this.generateTalentCosts();
@@ -5642,7 +5858,14 @@
           const distance = Math.sqrt(dx * dx + dy * dy);
           const rocketConfig = GameConfig.GRID_CELLS.SPECIAL_CELLS.ROCKET;
           const duration = rocketConfig.ANIMATION_DURATION;
-          const damage = monster.isBoss ? rocketConfig.DAMAGE.BOSS : rocketConfig.DAMAGE.NORMAL;
+          let damage;
+          if (monster.isFinalBoss) {
+            damage = rocketConfig.DAMAGE.BOSS * 1.5; // 对最终BOSS造成更高伤害
+          } else if (monster.isBoss) {
+            damage = rocketConfig.DAMAGE.BOSS;
+          } else {
+            damage = rocketConfig.DAMAGE.NORMAL;
+          }
           const maxHeight = -100;
           
           let startTime = null;
